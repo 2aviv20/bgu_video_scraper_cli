@@ -2,17 +2,16 @@ const http = require('http');
 const fs = require('fs');
 const cliProgress = require('cli-progress');
 
-const videoFile = "mivna_netunim_13.mp4";
+//change the video name 
+//********************* */
+const videoFile = "mivna_netunim_14.mp4";
 const file = fs.createWriteStream(`./downloads/${videoFile}`);
 let fileSize;
 let recived = 0;
 let precentCounter = 1;
-
  
 // create a new progress bar instance and use shades_classic theme
 const bar1 = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
-// start the progress bar with a total value of 200 and start value of 0
-
 
 const request = http.get(`http://stat.bgu.ac.il/vod/${videoFile}`, function(response) {
     // console.log(response.headers);
