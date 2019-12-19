@@ -15,7 +15,7 @@ node app.js
 
 "select the project code"
 
-## course <br />codes 
+## course codes 
 
 <br />code = 14  |        תורת הזרימה1
 <br />code = 15  |        תרמודינמיקה
