@@ -9,6 +9,8 @@ https://nodejs.org/en/
 
 open the project folder in the cmd
 
+npm i 
+
 run the file "downloadVideo.js"
 
 node downloadVideo.js
