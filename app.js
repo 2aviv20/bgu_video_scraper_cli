@@ -1,13 +1,17 @@
 const puppeteer = require("puppeteer");
 const fs = require("fs");
 var request = require("request-promise");
+const downloadVideo = require("./downloadVideo");
+
 
 (function() {
   start();
 })();
+
 async function start() {
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
+  //login
   await login(page);
   await page.waitFor(1000);
   //faculta
@@ -20,6 +24,12 @@ async function start() {
   await page.select("#MainContent_ddlCourse", "14");
   await page.waitFor(1000);
 
+  //start download
+  await downloadUrls(page);
+
+}
+
+async function downloadUrls(page){
   const elements = await page.$$(".filmname");
   let urls = [];
   let i = 0;
@@ -32,9 +42,11 @@ async function start() {
     urls.push(res.d[1]);
     i++;
   }
-console.log(urls);
+  console.log(urls);
+  for (let url of urls) {
+    await downloadVideo.download(url);
+  }
 }
-
 async function login(page) {
   await page.goto("http://video.bgu.ac.il/BGUVideo/default.aspx");
   //   await page.waitFor('');
@@ -44,7 +56,7 @@ async function login(page) {
   await page.click("#MainContent_btnLogin");
   //   await page.waitForNavigation();
   let cookieHack = await page.cookies();
-//   console.log(cookieHack);
+  //   console.log(cookieHack);
   return;
 }
 
@@ -75,10 +87,10 @@ async function getVideoById(videoId) {
 
   let response = await request(options);
   try {
-      response = JSON.parse(response);
-      return response;
+    response = JSON.parse(response);
+    return response;
   } catch (error) {
-      console.log("response eror *****");
-      return error;
+    console.log("response eror *****");
+    return error;
   }
 }
