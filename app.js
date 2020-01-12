@@ -1,42 +1,25 @@
 const readline = require("readline");
 const request = require("request-promise");
 const downloadVideo = require("./downloadVideo");
+const queue = require("./queue");
 const fs = require("fs");
 
 const serverUrl = "https://bgu-scraper.herokuapp.com";
 
 const start = async _code => {
-  //request options
-  const options = {
-    method: "POST",
-    url: `${serverUrl}/scrape/course`,
-    headers: {
-      "cache-control": "no-cache",
-      Connection: "keep-alive",
-      "Content-Length": "7",
-      "Accept-Encoding": "gzip, deflate",
-      Host: "bgu-scraper.herokuapp.com",
-      "Cache-Control": "no-cache",
-      Accept: "*/*",
-      "Content-Type": "application/x-www-form-urlencoded"
-    },
-    form: { code: _code }
-  };
-
   let urls = [];
   try {
-    urls = await request(options);
-    urls = JSON.parse(urls);
+    urls = await queue.addToQueue(_code);
     console.log(urls);
+    // download the videos from the urls array
+    for (let url of urls) {
+      await downloadVideo.download(url);
+    }
   } catch (error) {
     console.log("******");
     console.log(error);
   }
 
-  //download the videos from the urls array
-  for (let url of urls) {
-    await downloadVideo.download(url);
-  }
 };
 
 const wakeUpTheServer = async () => {
