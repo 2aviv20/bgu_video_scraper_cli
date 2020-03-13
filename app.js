@@ -11,13 +11,15 @@ const start = async _code => {
   try {
     urls = await queue.addToQueue(_code);
     console.log(urls);
+    const fileName = urls[0].replace("http://stat.bgu.ac.il/vod/","");
+    fs.writeFileSync(`./downloads/${fileName}_links.txt`,urls.join("\n"));
     // download the videos from the urls array
     for (let url of urls) {
       await downloadVideo.download(url);
     }
   } catch (error) {
     console.log("******");
-    console.log(error);
+    console.log(error);ß
   }
 
 };
